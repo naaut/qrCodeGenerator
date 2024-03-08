@@ -18,6 +18,7 @@ qt_add_executable(QrCodeGenerator
     presentation/QrCodePresenter.cpp
     usecase/QrCodeUsecase.h
     usecase/QrCodeUsecase.cpp
+    usecase/Entity.h
 )
 
 qt_add_qml_module(QrCodeGenerator

@@ -1,14 +1,20 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Controls.Material
 
 import injector
 import presenters
+import Entity
 
 ApplicationWindow {
     width: 640
     height: 680
     visible: true
     title: qsTr("QR Code generator")
+
+    Material.theme: Material.System
+    Material.accent: Material.Indigo
 
     QmlInjector {
         id: root
@@ -23,31 +29,143 @@ ApplicationWindow {
             anchors.fill: parent
             focus: true
 
-            TextEdit {
-                id: textEdit
-                anchors.top: page.top
-                padding: 10
-                width: parent.width
-                wrapMode: TextEdit.Wrap
-                focus: true
+            Column {
+                id: layout
 
-                font {
-                    pixelSize: 14
+                anchors {
+                    top: page.top
+                    left: page.left
+                    right: page.right
+                    topMargin: 2
+                    leftMargin: 2
+                    rightMargin: 2
+                }
+                bottomPadding: 4
+                spacing: 1
+
+                TextField {
+                    id: url
+
+
+                    height: 30
+                    width: parent.width
+                    wrapMode: TextEdit.Wrap
+                    focus: true
+
+                    font.pixelSize: 14
+
+                    text: "https://examlple.com"
+
+                    onTextChanged: $presenter.incomingString = url.text;
+                    Component.onCompleted: $presenter.incomingString = url.text;
                 }
 
-                text: "https://examlple.com"
+                Row {
+                    width: parent.width
 
-                onTextChanged: $presenter.incomingString = text;
-            }
+                    Image {
+                        id: qrCode
+                        width: Math.min(layout.width - settingColumn.width - settingColumn.leftPadding - settingColumn.rightPadding,
+                                        page.height - url.height)
+                        fillMode: Image.PreserveAspectFit
+                        source: $presenter.qrCodeUrl
+                    }
 
-            Image {
-                id: qrCode
+                    Column {
+                        id: settingColumn
+                        width: 140
+                        leftPadding: 4
+                        rightPadding: 4
 
-                anchors.top: textEdit.bottom
-                width: Math.min(parent.width, parent.height - textEdit.height)
-                height: width
-                fillMode: Qt.PreserveAspectFit
-                source: $presenter.qrCodeUrl
+                        Label {
+                            text: "Border:"
+                            font.pixelSize: 14
+                        }
+
+                        TextField {
+                            id: border
+
+                            height: 30
+                            width: parent.width
+
+                            horizontalAlignment: Text.AlignHCenter
+                            font.pixelSize: 14
+
+                            text: "1"
+
+                            onTextChanged: $presenter.border = +border.text;
+                        }
+
+                        Label {
+                            text: "Image size:"
+                            font.pixelSize: 14
+                        }
+
+                        TextField {
+                            id: imageSize
+
+                            height: 30
+                            width: parent.width
+
+                            horizontalAlignment: Text.AlignHCenter
+                            font.pixelSize: 14
+
+                            text: "1000"
+
+                            onTextChanged: $presenter.size = +text;
+                        }
+
+                        Label {
+                            text: "ECL:"
+                            font.pixelSize: 14
+                        }
+
+                        SpinBox {
+                            id: spinBox
+
+                            height: 30
+                            width: parent.width
+
+                            from: 0
+                            to: items.length - 1
+                            value: 1 // "Medium"
+
+                            readonly property var items: ["Low", "Medium", "Quartile", "High"]
+                            readonly property var valueToEnum: [
+                                ECL.Low,
+                                ECL.Medium,
+                                ECL.Quartile,
+                                ECL.High,
+                            ]
+
+                            validator: RegularExpressionValidator {
+                                regularExpression: new RegExp("(Low|Medium|Quartile|High)", "i")
+                            }
+
+                            textFromValue: function(value) {
+                                return items[value];
+                            }
+
+                            onValueChanged: $presenter.ecl = valueToEnum[value];
+                        }
+
+                        Switch {
+                            checked: true
+                            onCheckedChanged: $presenter.async = checked;
+                            topPadding: 14
+                            leftPadding: 0
+                            text: "Async"
+                        }
+
+                        Button {
+                            id: generateButton
+                            width: parent.width
+                            text: qsTr("Generate")
+
+                            onClicked: $presenter.parametrsChanged(); //TODO: clarify it
+                        }
+                    }
+                }
             }
 
             Keys.onPressed: (event)=> {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QFuture>
 #include <QObject>
 #include <QString>
 
@@ -15,17 +16,31 @@ class QrCodeUsecase : public QObject
 public:
     explicit QrCodeUsecase();
 
-    QString generateTextSvg(const QString &incomingString, const quint16 borderSize = 1,
-                          qrcodegen::QrCode::Ecc errorCorrection = qrcodegen::QrCode::Ecc::MEDIUM) const;
+    void requestUrlAsync(const QString &incomingString,
+                            const quint16 size = 1000,
+                            const quint16 borderSize = 1,
+                            const qrcodegen::QrCode::Ecc errorCorrection = qrcodegen::QrCode::Ecc::MEDIUM);
 
-    QImage generateImage(const QString &incomingString, const quint16 size = 1000, const quint16 borderSize = 1,
-                      qrcodegen::QrCode::Ecc errorCorrection = qrcodegen::QrCode::Ecc::MEDIUM) const;
+    QString generateTextSvg(const QString &incomingString,
+                            const quint16 borderSize = 1,
+                            const qrcodegen::QrCode::Ecc errorCorrection = qrcodegen::QrCode::Ecc::MEDIUM) const;
 
-    QUrl generateUrl(const QString &incomingString, const quint16 size = 1000, const quint16 borderSize = 1,
-                     qrcodegen::QrCode::Ecc errorCorrection = qrcodegen::QrCode::Ecc::MEDIUM) const;
+    QImage generateImage(const QString &incomingString,
+                         const quint16 size = 1000,
+                         const quint16 borderSize = 1,
+                         const qrcodegen::QrCode::Ecc errorCorrection = qrcodegen::QrCode::Ecc::MEDIUM) const;
+
+    QUrl generateUrl(const QString &incomingString,
+                     const quint16 size = 1000,
+                     const quint16 borderSize = 1,
+                     const qrcodegen::QrCode::Ecc errorCorrection = qrcodegen::QrCode::Ecc::MEDIUM) const;
+
+signals:
+    void imageUrlReady(const QUrl &imageUrl);
 
 private:
-    QString toSvgString(const qrcodegen::QrCode &qr, quint16 border) const;
+    QString toSvgString(const qrcodegen::QrCode &qr, const quint16 border) const;
+    QFuture<void> m_future;
 };
 
 using QrCodeUsecaseUnq = std::unique_ptr<QrCodeUsecase>;

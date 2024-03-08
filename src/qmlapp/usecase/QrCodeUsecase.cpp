@@ -6,20 +6,43 @@
 #include <QSvgRenderer>
 #include <QTextStream>
 #include <QUrl>
+#include <QtConcurrent/QtConcurrent>
+
 
 QrCodeUsecase::QrCodeUsecase()
 {
 
 }
 
-QString QrCodeUsecase::generateTextSvg(const QString &incomingString, const quint16 borderSize, qrcodegen::QrCode::Ecc errorCorrection) const
+void QrCodeUsecase::requestUrlAsync(const QString &incomingString,
+                                     const quint16 size,
+                                     const quint16 borderSize,
+                                     const qrcodegen::QrCode::Ecc errorCorrection)
+{
+    if (m_future.isRunning())
+    {
+        m_future.cancel();
+        qDebug() << "future canceled";
+    }
+
+    m_future = QtConcurrent::run([this, incomingString, size, borderSize, errorCorrection]() {
+        auto imageUrl = generateUrl(incomingString.toUtf8().constData(),size, borderSize, errorCorrection);
+        emit imageUrlReady(std::move(imageUrl));
+    });
+}
+
+QString QrCodeUsecase::generateTextSvg(const QString &incomingString,
+                                       const quint16 borderSize,
+                                       const qrcodegen::QrCode::Ecc errorCorrection) const
 {
     const auto qrCode = qrcodegen::QrCode::encodeText(incomingString.toUtf8().constData(), errorCorrection);
-
     return toSvgString(qrCode, borderSize);
 }
 
-QImage QrCodeUsecase::generateImage(const QString &incomingString, const quint16 size, const quint16 borderSize, qrcodegen::QrCode::Ecc errorCorrection) const
+QImage QrCodeUsecase::generateImage(const QString &incomingString,
+                                    const quint16 size,
+                                    const quint16 borderSize,
+                                    const qrcodegen::QrCode::Ecc errorCorrection) const
 {
     const auto qrCode = qrcodegen::QrCode::encodeText(incomingString.toUtf8().constData(), errorCorrection);
 
@@ -33,9 +56,15 @@ QImage QrCodeUsecase::generateImage(const QString &incomingString, const quint16
     return image;
 }
 
-QUrl QrCodeUsecase::generateUrl(const QString &incomingString, const quint16 size, const quint16 borderSize, qrcodegen::QrCode::Ecc errorCorrection) const
+QUrl QrCodeUsecase::generateUrl(const QString &incomingString,
+                                const quint16 size,
+                                const quint16 borderSize,
+                                const qrcodegen::QrCode::Ecc errorCorrection) const
 {
     auto image = generateImage(incomingString, size, borderSize, errorCorrection);
+
+    // TODO make it better!!!
+
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
     buffer.open(QIODevice::WriteOnly);
@@ -45,7 +74,7 @@ QUrl QrCodeUsecase::generateUrl(const QString &incomingString, const quint16 siz
 }
 
 
-QString QrCodeUsecase::toSvgString(const qrcodegen::QrCode &qr, quint16 border) const
+QString QrCodeUsecase::toSvgString(const qrcodegen::QrCode &qr, const quint16 border) const
 {
     QString str;
     QTextStream sb(&str);
