@@ -14,11 +14,13 @@ qt_standard_project_setup()
 
 qt_add_executable(QrCodeGenerator
     main.cpp
-    presentation/QrCodePresenter.h
+    core/Entity.h
+    core/Painter.h
+    core/Painter.cpp
     presentation/QrCodePresenter.cpp
-    usecase/QrCodeUsecase.h
+    presentation/QrCodePresenter.h
     usecase/QrCodeUsecase.cpp
-    usecase/Entity.h
+    usecase/QrCodeUsecase.h
 )
 
 qt_add_qml_module(QrCodeGenerator

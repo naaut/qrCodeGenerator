@@ -21,21 +21,23 @@ void QrCodePresenter::updateQrCode()
     {
         qDebug() << "async request url";
 
-        m_usecase->requestUrlAsync(incomingString(), size(), border(), ErrorCorrection::toCoreType(ecl()));
+        m_usecase->requestImageAsync(incomingString(), size(), border(), ErrorCorrection::toCoreType(ecl()));
 
-        connect(m_usecase.get(), &QrCodeUsecase::imageUrlReady, this, [this](auto url) {
+        connect(m_usecase.get(), &QrCodeUsecase::imageReady, this, [this](QImage image) {
                 qDebug() << "async request ready";
-                this->m_qrCodeUrl = url;
-                emit qrCodeUrlChanged();
+                if (image.isNull() || image == m_qrCodeImage) {
+                    return;
+                }
+                this->m_qrCodeImage = image;
+                emit qrCodeImageChanged();
 
             }, Qt::ConnectionType::SingleShotConnection);
     }
     else
     {
         qDebug() << "synchronous request url";
-
-        m_qrCodeUrl = m_usecase->generateUrl(incomingString(), size(), border(), ErrorCorrection::toCoreType(ecl()));
-        emit qrCodeUrlChanged();
+        m_qrCodeImage = m_usecase->generateImage(incomingString(), size(), border(), ErrorCorrection::toCoreType(ecl()));
+        emit qrCodeImageChanged();
     }
 }
 

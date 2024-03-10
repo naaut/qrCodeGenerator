@@ -16,7 +16,7 @@ class QrCodeUsecase : public QObject
 public:
     explicit QrCodeUsecase();
 
-    void requestUrlAsync(const QString &incomingString,
+    void requestImageAsync(const QString &incomingString,
                             const quint16 size = 1000,
                             const quint16 borderSize = 1,
                             const qrcodegen::QrCode::Ecc errorCorrection = qrcodegen::QrCode::Ecc::MEDIUM);
@@ -36,7 +36,7 @@ public:
                      const qrcodegen::QrCode::Ecc errorCorrection = qrcodegen::QrCode::Ecc::MEDIUM) const;
 
 signals:
-    void imageUrlReady(const QUrl &imageUrl);
+    void imageReady(const QImage & image);
 
 private:
     QString toSvgString(const qrcodegen::QrCode &qr, const quint16 border) const;

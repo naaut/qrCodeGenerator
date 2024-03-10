@@ -1,10 +1,13 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQmlEngine>
+#include <QQuickView>
 
 #include <presentation/QrCodePresenter.h>
 #include <usecase/QrCodeUsecase.h>
-#include <usecase/Entity.h>
+#include <core/Entity.h>
+#include <core/Painter.h>
 
 #include <qmlinjector/qmlinjector.h>
 #include <qmlinjector/qmlinjectorbuilder.h>
@@ -33,10 +36,11 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     qmlRegisterType<QmlInjector>("injector", 1, 0, "QmlInjector");
+    qmlRegisterType<Painter>("core", 1, 0, "Painter");
 
     engine.rootContext()->setContextObject(builder.build());
     engine.rootContext()->setContextProperty("$QmlEngine", &engine);
-    qmlRegisterUncreatableType<ErrorCorrection>("Entity", 1, 0, "ECL", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<ErrorCorrection>("entity", 1, 0, "ECL", "Not creatable as it is an enum type");
 
     app.setOrganizationName("sednev");
     app.setOrganizationDomain("net");

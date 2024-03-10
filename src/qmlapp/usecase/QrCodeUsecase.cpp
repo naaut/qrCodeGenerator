@@ -14,7 +14,7 @@ QrCodeUsecase::QrCodeUsecase()
 
 }
 
-void QrCodeUsecase::requestUrlAsync(const QString &incomingString,
+void QrCodeUsecase::requestImageAsync(const QString &incomingString,
                                      const quint16 size,
                                      const quint16 borderSize,
                                      const qrcodegen::QrCode::Ecc errorCorrection)
@@ -26,8 +26,8 @@ void QrCodeUsecase::requestUrlAsync(const QString &incomingString,
     }
 
     m_future = QtConcurrent::run([this, incomingString, size, borderSize, errorCorrection]() {
-        auto imageUrl = generateUrl(incomingString.toUtf8().constData(),size, borderSize, errorCorrection);
-        emit imageUrlReady(std::move(imageUrl));
+        auto image = generateImage(incomingString.toUtf8().constData(),size, borderSize, errorCorrection);
+        emit imageReady(std::move(image));
     });
 }
 
@@ -53,7 +53,7 @@ QImage QrCodeUsecase::generateImage(const QString &incomingString,
     QPainter painter(&image);
     painter.setRenderHint(QPainter::Antialiasing);
     render.render(&painter);
-    return image;
+    return std::move(image);
 }
 
 QUrl QrCodeUsecase::generateUrl(const QString &incomingString,
@@ -61,10 +61,8 @@ QUrl QrCodeUsecase::generateUrl(const QString &incomingString,
                                 const quint16 borderSize,
                                 const qrcodegen::QrCode::Ecc errorCorrection) const
 {
+    // Don't use it pls
     auto image = generateImage(incomingString, size, borderSize, errorCorrection);
-
-    // TODO make it better!!!
-
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
     buffer.open(QIODevice::WriteOnly);

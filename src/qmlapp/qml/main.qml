@@ -5,11 +5,12 @@ import QtQuick.Controls.Material
 
 import injector
 import presenters
-import Entity
+import core
+import entity
 
 ApplicationWindow {
     width: 640
-    height: 680
+    height: 540
     visible: true
     title: qsTr("QR Code generator")
 
@@ -40,14 +41,12 @@ ApplicationWindow {
                     leftMargin: 2
                     rightMargin: 2
                 }
-                bottomPadding: 4
-                spacing: 1
+                spacing: 4
 
                 TextField {
                     id: url
 
-
-                    height: 30
+                    height: 36
                     width: parent.width
                     wrapMode: TextEdit.Wrap
                     focus: true
@@ -63,12 +62,22 @@ ApplicationWindow {
                 Row {
                     width: parent.width
 
-                    Image {
-                        id: qrCode
+                    Item {
                         width: Math.min(layout.width - settingColumn.width - settingColumn.leftPadding - settingColumn.rightPadding,
                                         page.height - url.height)
-                        fillMode: Image.PreserveAspectFit
-                        source: $presenter.qrCodeUrl
+                        height: width
+
+                        Painter {
+                            id: qrCode
+                            anchors.fill: parent
+
+                            Connections {
+                                target: $presenter
+                                function onQrCodeImageChanged() {
+                                    qrCode.setImage($presenter.qrCodeImage);
+                                }
+                            }
+                        }
                     }
 
                     Column {
@@ -78,7 +87,7 @@ ApplicationWindow {
                         rightPadding: 4
 
                         Label {
-                            text: "Border:"
+                            text: qsTr("Border:")
                             font.pixelSize: 14
                         }
 
@@ -93,11 +102,15 @@ ApplicationWindow {
 
                             text: "1"
 
+                            validator: RegularExpressionValidator {
+                                regularExpression: new RegExp("[0-9]+")
+                            }
+
                             onTextChanged: $presenter.border = +border.text;
                         }
 
                         Label {
-                            text: "Image size:"
+                            text: qsTr("Image size:")
                             font.pixelSize: 14
                         }
 
@@ -112,49 +125,46 @@ ApplicationWindow {
 
                             text: "1000"
 
+                            validator: RegularExpressionValidator {
+                                regularExpression: new RegExp("[0-9]+")
+                            }
+
                             onTextChanged: $presenter.size = +text;
                         }
 
                         Label {
-                            text: "ECL:"
+                            text: qsTr("ECL:")
                             font.pixelSize: 14
                         }
 
-                        SpinBox {
-                            id: spinBox
-
-                            height: 30
+                        ComboBox {
                             width: parent.width
+                            currentIndex: 1
+                            textRole: "text"
+                            valueRole: "value"
 
-                            from: 0
-                            to: items.length - 1
-                            value: 1 // "Medium"
+                            topInset: 0
+                            bottomInset: 0
 
-                            readonly property var items: ["Low", "Medium", "Quartile", "High"]
-                            readonly property var valueToEnum: [
-                                ECL.Low,
-                                ECL.Medium,
-                                ECL.Quartile,
-                                ECL.High,
-                            ]
-
-                            validator: RegularExpressionValidator {
-                                regularExpression: new RegExp("(Low|Medium|Quartile|High)", "i")
+                            model: ListModel {
+                                id: cbItems
+                                ListElement { text: qsTr("Low"); value: ECL.Low }
+                                ListElement { text: qsTr("Medium"); value: ECL.Medium }
+                                ListElement { text: qsTr("Quartile"); value: ECL.Quartile }
+                                ListElement { text: qsTr("High"); value: ECL.High }
                             }
 
-                            textFromValue: function(value) {
-                                return items[value];
-                            }
-
-                            onValueChanged: $presenter.ecl = valueToEnum[value];
+                            onActivated: $presenter.ecl = currentValue;
                         }
 
                         Switch {
                             checked: true
-                            onCheckedChanged: $presenter.async = checked;
+
                             topPadding: 14
                             leftPadding: 0
-                            text: "Async"
+                            text: qsTr("Async")
+
+                             onCheckedChanged: $presenter.async = checked;
                         }
 
                         Button {

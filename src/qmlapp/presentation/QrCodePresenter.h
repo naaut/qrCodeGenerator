@@ -1,9 +1,10 @@
 #pragma once
 
 #include <usecase/QrCodeUsecase.h>
-#include <usecase/Entity.h>
+#include <core/Entity.h>
 
 #include <QObject>
+#include <QImage>
 #include <QString>
 #include <QUrl>
 
@@ -19,6 +20,7 @@ class QrCodePresenter : public QObject
     Q_PROPERTY(bool async READ async WRITE setAsync NOTIFY asyncChanged FINAL)
 
     Q_PROPERTY(QUrl qrCodeUrl READ qrCodeUrl  NOTIFY qrCodeUrlChanged FINAL)
+    Q_PROPERTY(QImage qrCodeImage READ qrCodeImage  NOTIFY qrCodeImageChanged FINAL)
 
 public:
     explicit QrCodePresenter(QrCodeUsecaseUnq usecase);
@@ -30,11 +32,13 @@ public:
     bool async() const { return m_async; }
 
     QUrl qrCodeUrl() const { return m_qrCodeUrl; }
+    QImage qrCodeImage() const { return m_qrCodeImage; }
 
 signals:
     void parametrsChanged();
     void asyncChanged();
-    QUrl qrCodeUrlChanged();
+    void qrCodeUrlChanged();
+    void qrCodeImageChanged();
 
 private:
     void setIncomingString(const QString & incoming);
@@ -55,6 +59,7 @@ private:
     bool m_async{true};
 
     QUrl m_qrCodeUrl;
+    QImage m_qrCodeImage;
 };
 
 using QrCodePresenterUnq = std::unique_ptr<QrCodePresenter>;
