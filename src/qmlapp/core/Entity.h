@@ -25,7 +25,3 @@ public:
         return static_cast<qrcodegen::QrCode::Ecc>(level);
     }
 };
-
-
-
-

@@ -5,7 +5,8 @@
 #include <QQuickView>
 
 #include <presentation/QrCodePresenter.h>
-#include <usecase/QrCodeUsecase.h>
+#include <usecase/GenerationUsecase.h>
+#include <usecase/PrintingUsecase.h>
 #include <core/Entity.h>
 #include <core/Painter.h>
 
@@ -21,7 +22,8 @@ const char * const qmlPath = "qrc:/QmlInjectorCore/qml/main.qml";
 int main(int argc, char *argv[])
 {
     const auto injector = di::make_injector(
-            di::bind<QrCodeUsecase>.to<QrCodeUsecase>()
+            di::bind<QrCodeUsecase>.to<QrCodeUsecase>(),
+            di::bind<PrintingUsecase>.to<PrintingUsecase>()
         );
 
     QmlInjectorBuilder builder;

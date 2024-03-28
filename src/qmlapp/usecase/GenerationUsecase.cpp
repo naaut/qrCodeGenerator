@@ -1,4 +1,4 @@
-#include "QrCodeUsecase.h"
+#include "GenerationUsecase.h"
 
 #include <QBuffer>
 #include <QByteArray>
@@ -55,22 +55,6 @@ QImage QrCodeUsecase::generateImage(const QString &incomingString,
     render.render(&painter);
     return std::move(image);
 }
-
-QUrl QrCodeUsecase::generateUrl(const QString &incomingString,
-                                const quint16 size,
-                                const quint16 borderSize,
-                                const qrcodegen::QrCode::Ecc errorCorrection) const
-{
-    // Don't use it pls
-    auto image = generateImage(incomingString, size, borderSize, errorCorrection);
-    QByteArray byteArray;
-    QBuffer buffer(&byteArray);
-    buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "png");
-    QString base64 = QString::fromUtf8(byteArray.toBase64());
-    return QString("data:image/png;base64,") + base64;
-}
-
 
 QString QrCodeUsecase::toSvgString(const qrcodegen::QrCode &qr, const quint16 border) const
 {

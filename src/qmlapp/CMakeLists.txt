@@ -7,6 +7,7 @@ find_package(Qt6 6.5 REQUIRED
         Qml
         Quick
         Svg
+        PrintSupport
 )
 
 
@@ -19,8 +20,10 @@ qt_add_executable(QrCodeGenerator
     core/Painter.cpp
     presentation/QrCodePresenter.cpp
     presentation/QrCodePresenter.h
-    usecase/QrCodeUsecase.cpp
-    usecase/QrCodeUsecase.h
+    usecase/GenerationUsecase.cpp
+    usecase/GenerationUsecase.h
+    usecase/PrintingUsecase.cpp
+    usecase/PrintingUsecase.h
 )
 
 qt_add_qml_module(QrCodeGenerator
@@ -32,6 +35,20 @@ qt_add_qml_module(QrCodeGenerator
 
 qt_target_qml_sources(QrCodeGenerator
     QML_FILES
+    qml/Entity/TemplatesModel.qml
+    qml/MainScreen.qml
+    qml/Popups/CryptoPopup.qml
+    qml/Popups/EmailPopup.qml
+    qml/Popups/GeoPopup.qml
+    qml/Popups/PopupLoader.qml
+    qml/Popups/PopupTemplate.qml
+    qml/Popups/SmsPopup.qml
+    qml/Popups/SocialMediaPopup.qml
+    qml/Popups/UrlPopup.qml
+    qml/Popups/VCardPopup.qml
+    qml/Popups/VEventPopup.qml
+    qml/Popups/WifiPopup.qml
+    qml/TemplatesScreen.qml
     qml/main.qml
 )
 
@@ -42,6 +59,7 @@ target_link_libraries(QrCodeGenerator
         Qt6::Qml
         Qt6::Quick
         Qt6::Svg
+        Qt6::PrintSupport
         qmlinjector
         qrcodegen
 )

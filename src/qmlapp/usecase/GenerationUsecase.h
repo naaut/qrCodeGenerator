@@ -30,11 +30,6 @@ public:
                          const quint16 borderSize = 1,
                          const qrcodegen::QrCode::Ecc errorCorrection = qrcodegen::QrCode::Ecc::MEDIUM) const;
 
-    QUrl generateUrl(const QString &incomingString,
-                     const quint16 size = 1000,
-                     const quint16 borderSize = 1,
-                     const qrcodegen::QrCode::Ecc errorCorrection = qrcodegen::QrCode::Ecc::MEDIUM) const;
-
 signals:
     void imageReady(const QImage & image);
 
