@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QMetaType>
 #include <qrcodegen/qrcodegen.hpp>
 
 
@@ -24,4 +25,12 @@ public:
         // TODO: can do it better?
         return static_cast<qrcodegen::QrCode::Ecc>(level);
     }
+};
+
+
+struct QrCodeSettings {
+    int size{1000};
+    int borderSize{1};
+    ErrorCorrection::Level errorCorrection{ErrorCorrection::Level::Medium};
+    bool async{true};
 };

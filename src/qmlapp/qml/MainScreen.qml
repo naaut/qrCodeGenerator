@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Controls.Material
+import QtQuick.Window
 
 import injector
 import presenters
@@ -10,10 +11,11 @@ import entity
 
 import "Entity"
 
-QmlInjector {
+BaseInjectorPage {
     id: root
+    objectName: "mainPage"
 
-    signal openTemplatesPage()
+    signal openSettings
     signal openPopup(var popupUrl, var properties)
 
     sourceComponent: Page {
@@ -33,6 +35,17 @@ QmlInjector {
 
         function openPopup(popupType) {
             page.injector.openPopup(templatesModel.getUrl(popupType), { closeCallback: page.popupCallback });
+        }
+
+        function openSettings() {
+            page.injector.openSettings();
+        }
+
+        Connections {
+            target: page.injector
+            function onBackInActive() {
+                $presenter.parametrsChanged();
+            }
         }
 
         TemplatesModel {
@@ -65,8 +78,36 @@ QmlInjector {
 
                     text: "http://sednev.net/"
 
-                    onTextChanged: $presenter.incomingString = urlField.text;
-                    Component.onCompleted: $presenter.incomingString = urlField.text;
+                    onTextChanged: {
+                        $presenter.incomingString = urlField.text;
+                    }
+
+                    Component.onCompleted: {
+                        $presenter.incomingString = urlField.text;
+                    }
+
+                    MouseArea {
+                        id: ma
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+
+                        function showTooltip(text) {
+                            toolTip.x = ma.mouseX;
+                            toolTip.y = ma.mouseY;
+                            toolTip.show("Copied to Clipboard!");
+                        }
+
+                        onClicked: {
+                            $presenter.copyToClipboard(urlField.text);
+                            showTooltip("Copied to Clipboard!");
+                        }
+                    }
+
+                    ToolTip {
+                        id: toolTip
+                        timeout: 600
+                        visible: false
+                    }
                 }
 
                 Item {
@@ -100,87 +141,10 @@ QmlInjector {
                     leftPadding: 4
                     rightPadding: 4
 
-                    Label {
-                        text: qsTr("Border:")
-                        font.pixelSize: 14
-                    }
-
-                    TextField {
-                        id: border
-
-                        height: 30
-                        width: parent.width
-
-                        horizontalAlignment: Text.AlignHCenter
-                        font.pixelSize: 14
-
-                        text: "1"
-
-                        validator: RegularExpressionValidator {
-                            regularExpression: new RegExp("[0-9]+")
-                        }
-                        inputMask: "9"
-
-                        onTextChanged: $presenter.border = +border.text;
-                    }
-
-                    Label {
-                        text: qsTr("Image size:")
-                        font.pixelSize: 14
-                    }
-
-                    TextField {
-                        id: imageSize
-
-                        height: 30
-                        width: parent.width
-
-                        horizontalAlignment: Text.AlignHCenter
-                        font.pixelSize: 14
-
-                        text: "1000"
-
-                        validator: RegularExpressionValidator {
-                            regularExpression: new RegExp("[0-9]+")
-                        }
-                        inputMask: "99999"
-
-                        onTextChanged: $presenter.size = +text;
-                    }
-
-                    Label {
-                        text: qsTr("ECL:")
-                        font.pixelSize: 14
-                    }
-
-                    ComboBox {
-                        width: parent.width
-                        currentIndex: 1
-                        textRole: "text"
-                        valueRole: "value"
-
-                        topInset: 0
-                        bottomInset: 0
-
-                        model: ListModel {
-                            id: cbItems
-                            ListElement { text: qsTr("Low"); value: ECL.Low }
-                            ListElement { text: qsTr("Medium"); value: ECL.Medium }
-                            ListElement { text: qsTr("Quartile"); value: ECL.Quartile }
-                            ListElement { text: qsTr("High"); value: ECL.High }
-                        }
-
-                        onActivated: $presenter.ecl = currentValue;
-                    }
-
-                    Switch {
-                        checked: true
-
-                        topPadding: 14
-                        leftPadding: 0
-                        text: qsTr("Async")
-
-                        onCheckedChanged: $presenter.async = checked;
+                    Button {
+                        width: settingColumn.width
+                        text: qsTr("Settings")
+                        onClicked: page.openSettings()
                     }
 
                     Repeater {
@@ -188,7 +152,7 @@ QmlInjector {
                         Button {
                             width: settingColumn.width
                             text: modelData.text
-                            onClicked: page.openPopup(modelData.value);
+                            onClicked: page.openPopup(modelData.value)
                         }
                     }
                 }

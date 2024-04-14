@@ -20,10 +20,14 @@ qt_add_executable(QrCodeGenerator
     core/Painter.cpp
     presentation/QrCodePresenter.cpp
     presentation/QrCodePresenter.h
+    presentation/SettingsPresenter.cpp
+    presentation/SettingsPresenter.h
     usecase/GenerationUsecase.cpp
     usecase/GenerationUsecase.h
     usecase/PrintingUsecase.cpp
     usecase/PrintingUsecase.h
+    usecase/SettingsUsecase.cpp
+    usecase/SettingsUsecase.h
 )
 
 qt_add_qml_module(QrCodeGenerator
@@ -36,19 +40,21 @@ qt_add_qml_module(QrCodeGenerator
 qt_target_qml_sources(QrCodeGenerator
     QML_FILES
     qml/Entity/TemplatesModel.qml
-    qml/MainScreen.qml
     qml/Popups/CryptoPopup.qml
     qml/Popups/EmailPopup.qml
     qml/Popups/GeoPopup.qml
     qml/Popups/PopupLoader.qml
     qml/Popups/PopupTemplate.qml
+    qml/Popups/SimpleTextPopup.qml
     qml/Popups/SmsPopup.qml
     qml/Popups/SocialMediaPopup.qml
     qml/Popups/UrlPopup.qml
     qml/Popups/VCardPopup.qml
     qml/Popups/VEventPopup.qml
     qml/Popups/WifiPopup.qml
-    qml/TemplatesScreen.qml
+    qml/BaseInjectorPage.qml
+    qml/MainScreen.qml
+    qml/SettingsScreen.qml
     qml/main.qml
 )
 

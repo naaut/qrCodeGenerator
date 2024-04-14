@@ -13,4 +13,3 @@ public:
 };
 
 using PrintingUsecaseUnq = std::unique_ptr<PrintingUsecase>;
-

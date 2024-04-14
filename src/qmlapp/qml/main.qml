@@ -9,10 +9,14 @@ ApplicationWindow {
     width: 840
     height: 700
     visible: true
-    title: qsTr("QR Code generator")
+    title: qsTr("QrCode generator")
 
     Material.theme: Material.System
     Material.accent: Material.Indigo
+
+    onClosing: {
+        mainStack.clear();
+    }
 
     StackView {
         id: mainStack
@@ -20,9 +24,9 @@ ApplicationWindow {
         anchors.fill: parent
 
         initialItem: MainScreen {
-            // onOpenTemplatesPage: {
-            //     mainStack.push(Qt.resolvedUrl("TemplatesScreen.qml"));
-            // }
+            onOpenSettings: {
+                mainStack.push(Qt.resolvedUrl("SettingsScreen.qml"));
+            }
 
             onOpenPopup: function (popupUrl, properties) {
                 popupLoader.open(popupUrl, properties);
@@ -34,13 +38,11 @@ ApplicationWindow {
             ignoreUnknownSignals: true
 
             function onClose() {
-                mainStack.pop();
-            }
-        }
-
-        Keys.onPressed: (event)=> {
-            if (event.key == Qt.Key_Escape) {
-                Qt.quit();
+                if (mainStack.depth === 1) {
+                    Qt.quit();
+                } else {
+                    mainStack.pop();
+                }
             }
         }
     }

@@ -1,29 +1,38 @@
 #include "QrCodePresenter.h"
 
-#include <QByteArray>
 #include <QBuffer>
+#include <QByteArray>
 #include <QDebug>
+#include <QtGui/QClipboard>
+#include <QtGui/QGuiApplication>
 
 
-QrCodePresenter::QrCodePresenter(QrCodeUsecaseUnq generation_usecase, PrintingUsecaseUnq print_usecase)
+QrCodePresenter::QrCodePresenter(QrCodeUsecaseUnq generation_usecase, SettingsUsecaseUnq settings_usecase)
     : QObject()
     , m_generation_usecase(std::move(generation_usecase))
-    , m_print_usecase(std::move(print_usecase))
+    , s_settings_usecase(std::move(settings_usecase))
 {
     Q_ASSERT(m_generation_usecase);
-    Q_ASSERT(m_print_usecase);
+    Q_ASSERT(s_settings_usecase);
 
+    m_generation_settings = s_settings_usecase->loadSettings();
     connect(this, &QrCodePresenter::parametrsChanged, this, &QrCodePresenter::updateQrCode);
 }
 
-void QrCodePresenter::print()
+void QrCodePresenter::copyToClipboard(const QString &text)
 {
-    m_print_usecase->printQRCode(m_qrCodeImage);
+    if (!text.isEmpty())
+    {
+        QClipboard * clipboard = QGuiApplication::clipboard();
+        clipboard->setText(qPrintable(text));
+    }
 }
 
 void QrCodePresenter::updateQrCode()
 {
-    if (m_async)
+    m_generation_settings = s_settings_usecase->loadSettings();
+
+    if (m_generation_settings.async)
     {
         qDebug() << "Starting update Qr code with async request url";
 
@@ -42,12 +51,18 @@ void QrCodePresenter::updateQrCode()
                 emit qrCodeImageChanged();
             }, Qt::ConnectionType::SingleShotConnection);
 
-        m_generation_usecase->requestImageAsync(m_incomingString, m_size, m_border, ErrorCorrection::toCoreType(m_ecl));
+        m_generation_usecase->requestImageAsync(m_incomingString,
+                                                m_generation_settings.size,
+                                                m_generation_settings.borderSize,
+                                                ErrorCorrection::toCoreType(m_generation_settings.errorCorrection));
     }
     else
     {
         qDebug() << "Starting update Qr code with synchronous request url";
-        m_qrCodeImage = m_generation_usecase->generateImage(m_incomingString, m_size, m_border, ErrorCorrection::toCoreType(m_ecl));
+        m_qrCodeImage = m_generation_usecase->generateImage(m_incomingString,
+                                                            m_generation_settings.size,
+                                                            m_generation_settings.borderSize,
+                                                            ErrorCorrection::toCoreType(m_generation_settings.errorCorrection));
         emit qrCodeImageChanged();
     }
 }

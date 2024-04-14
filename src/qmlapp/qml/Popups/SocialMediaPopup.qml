@@ -27,13 +27,13 @@ PopupTemplate {
             ListElement { text: qsTr("Twitter"); value: "https://twitter.com/" }
             ListElement { text: qsTr("LinkedIn"); value: "https://www.linkedin.com/in/" }
             ListElement { text: qsTr("YouTube"); value: "https://www.youtube.com/channel/" } // index 6
-            ListElement { text: qsTr("VK (VKontakte)"); value: "https://vk.com/username" }
-            ListElement { text: qsTr("Snapchat"); value: "https://www.snapchat.com/add/username" }
-            ListElement { text: qsTr("Pinterest"); value: "https://www.pinterest.com/username" }
-            ListElement { text: qsTr("TikTok"); value: "https://www.tiktok.com/@username" }
-            ListElement { text: qsTr("Spotify"); value: "https://open.spotify.com/user/username" }
+            ListElement { text: qsTr("VK (VKontakte)"); value: "https://vk.com/username/" }
+            ListElement { text: qsTr("Snapchat"); value: "https://www.snapchat.com/add/" }
+            ListElement { text: qsTr("Pinterest"); value: "https://www.pinterest.com/" }
+            ListElement { text: qsTr("TikTok"); value: "https://www.tiktok.com/@" }
+            ListElement { text: qsTr("Spotify"); value: "https://open.spotify.com/user/" }
             ListElement { text: qsTr("Spotify Playlist"); value: "https://open.spotify.com/playlist/" } // index 12
-            ListElement { text: qsTr("SoundCloud"); value: "https://soundcloud.com/username" }
+            ListElement { text: qsTr("SoundCloud"); value: "https://soundcloud.com/" }
         }
     }
 

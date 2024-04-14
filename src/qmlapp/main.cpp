@@ -5,8 +5,9 @@
 #include <QQuickView>
 
 #include <presentation/QrCodePresenter.h>
+#include <presentation/SettingsPresenter.h>
 #include <usecase/GenerationUsecase.h>
-#include <usecase/PrintingUsecase.h>
+#include <usecase/SettingsUsecase.h>
 #include <core/Entity.h>
 #include <core/Painter.h>
 
@@ -23,7 +24,7 @@ int main(int argc, char *argv[])
 {
     const auto injector = di::make_injector(
             di::bind<QrCodeUsecase>.to<QrCodeUsecase>(),
-            di::bind<PrintingUsecase>.to<PrintingUsecase>()
+            di::bind<SettingsUsecase>.to<SettingsUsecase>()
         );
 
     QmlInjectorBuilder builder;
@@ -33,6 +34,12 @@ int main(int argc, char *argv[])
         {
             return injector.create<QrCodePresenterUnq>();
         });
+    builder.add<SettingsPresenter>(
+        [&injector](const QVariant &)
+        {
+            return injector.create<SettingsPresenterUnq>();
+        });
+
 
     QGuiApplication app(argc, argv);
 
@@ -44,8 +51,9 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("$QmlEngine", &engine);
     qmlRegisterUncreatableType<ErrorCorrection>("entity", 1, 0, "ECL", "Not creatable as it is an enum type");
 
-    app.setOrganizationName("sednev");
-    app.setOrganizationDomain("net");
+    app.setOrganizationName("sednev.net");
+    app.setOrganizationDomain("sednev.net");
+    app.setApplicationName("QrCode Generator");
 
     QObject::connect(
         &engine,

@@ -11,7 +11,8 @@ QtObject {
         VEvent,
         Crypto,
         Sms,
-        SocialMedia
+        SocialMedia,
+        SimpleText
     }
 
     function getModel() {
@@ -38,6 +39,8 @@ QtObject {
                 return Qt.resolvedUrl("../Popups/SmsPopup.qml");
             case TemplatesModel.SocialMedia:
                 return Qt.resolvedUrl("../Popups/SocialMediaPopup.qml");
+            case TemplatesModel.SimpleText:
+                return Qt.resolvedUrl("../Popups/SimpleTextPopup.qml");
             default:
                 console.error("Unexpected popup type " + popupType);
         }
@@ -52,7 +55,8 @@ QtObject {
         { text: qsTr("Crypto Payment"), value: TemplatesModel.Crypto },
         { text: qsTr("Geolocation"), value: TemplatesModel.Geo },
         { text: qsTr("Email"), value: TemplatesModel.Email },
-        { text: qsTr("SMS Message"), value: TemplatesModel.Sms }
+        { text: qsTr("SMS Message"), value: TemplatesModel.Sms },
+        { text: qsTr("Simple Text"), value: TemplatesModel.SimpleText }
    ]
 }
 
