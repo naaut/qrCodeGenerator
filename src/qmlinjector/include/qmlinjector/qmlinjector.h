@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QQmlComponent>
-#include <QQmlParserStatus>
-#include <QQuickItem>
+#include <QtQml/QQmlComponent>
+#include <QtQml/QQmlParserStatus>
+#include <QtQuick/QQuickItem>
 
 class QmlInjector : public QQuickItem
 {

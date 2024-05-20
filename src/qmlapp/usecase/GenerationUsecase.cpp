@@ -1,12 +1,12 @@
 #include "GenerationUsecase.h"
 
-#include <QBuffer>
-#include <QByteArray>
-#include <QPainter>
-#include <QSvgRenderer>
-#include <QTextStream>
-#include <QUrl>
 #include <QtConcurrent/QtConcurrent>
+#include <QtCore/QBuffer>
+#include <QtCore/QByteArray>
+#include <QtCore/QTextStream>
+#include <QtCore/QUrl>
+#include <QtGui/QPainter>
+#include <QtSvg/QSvgRenderer>
 
 
 QrCodeUsecase::QrCodeUsecase()

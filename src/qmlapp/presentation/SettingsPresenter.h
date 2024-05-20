@@ -1,17 +1,17 @@
 #pragma once
 
-#include <usecase/SettingsUsecase.h>
-
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <memory>
+
+#include <usecase/SettingsUsecase.h>
 
 
 class SettingsPresenter : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(ErrorCorrection::Level ecl MEMBER m_ecl NOTIFY parametrsChanged FINAL)
+    Q_PROPERTY(domain::ErrorCorrection::Level ecl MEMBER m_ecl NOTIFY parametrsChanged FINAL)
     Q_PROPERTY(bool async MEMBER m_async NOTIFY parametrsChanged FINAL)
     Q_PROPERTY(int border MEMBER m_border NOTIFY parametrsChanged FINAL)
     Q_PROPERTY(int size MEMBER m_size NOTIFY parametrsChanged FINAL)
@@ -32,7 +32,7 @@ private:
 
     int m_size{1000};
     int m_border{1};
-    ErrorCorrection::Level m_ecl{ErrorCorrection::Level::Medium};
+    domain::ErrorCorrection::Level m_ecl{domain:: ErrorCorrection::Level::Medium};
     bool m_async{true};
 };
 

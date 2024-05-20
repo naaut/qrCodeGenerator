@@ -3,7 +3,7 @@
 #include "qmlobjectcreator.h"
 #include "qqml.h"
 
-#include <QDebug>
+#include <QtCore/QDebug>
 
 class QmlInjectorBuilder
 {

@@ -1,10 +1,12 @@
 #include "QrCodePresenter.h"
 
-#include <QBuffer>
-#include <QByteArray>
-#include <QDebug>
+#include <QtCore/QBuffer>
+#include <QtCore/QByteArray>
+#include <QtCore/QDebug>
 #include <QtGui/QClipboard>
 #include <QtGui/QGuiApplication>
+
+#include <core/Utils.h>
 
 
 QrCodePresenter::QrCodePresenter(QrCodeUsecaseUnq generation_usecase, SettingsUsecaseUnq settings_usecase)
@@ -54,7 +56,7 @@ void QrCodePresenter::updateQrCode()
         m_generation_usecase->requestImageAsync(m_incomingString,
                                                 m_generation_settings.size,
                                                 m_generation_settings.borderSize,
-                                                ErrorCorrection::toCoreType(m_generation_settings.errorCorrection));
+                                                toCoreType(m_generation_settings.errorCorrection));
     }
     else
     {
@@ -62,7 +64,7 @@ void QrCodePresenter::updateQrCode()
         m_qrCodeImage = m_generation_usecase->generateImage(m_incomingString,
                                                             m_generation_settings.size,
                                                             m_generation_settings.borderSize,
-                                                            ErrorCorrection::toCoreType(m_generation_settings.errorCorrection));
+                                                            toCoreType(m_generation_settings.errorCorrection));
         emit qrCodeImageChanged();
     }
 }

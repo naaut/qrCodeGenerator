@@ -23,22 +23,47 @@ BaseInjectorPage {
 
         property QmlInjector injector
         property QrCodePresenter $presenter
+        property HistoryPresenter $historyPresenter
 
         anchors.fill: parent
         focus: true
 
-        function popupCallback(incomingString) {
+        function popupCallback(incomingString, popupType) {
+            if (page && urlField) {
+                urlField.text = incomingString;
+                saveToHistory(urlField.text, popupType);
+            }
+        }
+
+        function popupHistoryCallback(incomingString) {
             if (page && urlField) {
                 urlField.text = incomingString;
             }
         }
 
         function openPopup(popupType) {
-            page.injector.openPopup(templatesModel.getUrl(popupType), { closeCallback: page.popupCallback });
+            page.injector.openPopup(templatesModel.getUrl(popupType),
+                                    {
+                                        closeCallback: (incomingString) => {
+                                            page.popupCallback(incomingString, popupType);
+                                        }
+                                    });
         }
 
         function openSettings() {
             page.injector.openSettings();
+        }
+
+        function openHistoryPopup(popupType) {
+            page.injector.openPopup(Qt.resolvedUrl("./Popups/HistoryPopup.qml"),
+                                    {
+                                        historyPresenter: $historyPresenter,
+                                        closeCallback: popupHistoryCallback
+                                    });
+        }
+
+        function saveToHistory(incomingString, popupType) {
+            $historyPresenter.addHistoryItem(incomingString, popupType);
         }
 
         Connections {
@@ -123,6 +148,7 @@ BaseInjectorPage {
                             target: $presenter
                             function onQrCodeImageChanged() {
                                 qrCode.setImage($presenter.qrCodeImage);
+
                             }
                         }
                     }
@@ -133,7 +159,7 @@ BaseInjectorPage {
                 contentHeight: settingColumn.height
                 flickableDirection: Flickable.VerticalFlick
                 height: imageWrapper.height
-                width: 140
+                width: 180
 
                 Column {
                     id: settingColumn
@@ -145,6 +171,12 @@ BaseInjectorPage {
                         width: settingColumn.width
                         text: qsTr("Settings")
                         onClicked: page.openSettings()
+                    }
+
+                    Button {
+                        width: settingColumn.width
+                        text: qsTr("History")
+                        onClicked: page.openHistoryPopup()
                     }
 
                     Repeater {

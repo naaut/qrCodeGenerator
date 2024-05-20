@@ -1,13 +1,13 @@
 #pragma once
 
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QUrl>
+#include <QtGui/QImage>
+
+#include <domain/entity/Entity.h>
 #include <usecase/GenerationUsecase.h>
 #include <usecase/SettingsUsecase.h>
-#include <core/Entity.h>
-
-#include <QObject>
-#include <QImage>
-#include <QString>
-#include <QUrl>
 
 
 class QrCodePresenter : public QObject
@@ -38,7 +38,7 @@ private:
     QMetaObject::Connection m_requestConnection;
 
     QString m_incomingString;
-    QrCodeSettings m_generation_settings;
+    domain::QrCodeSettings m_generation_settings;
     QImage m_qrCodeImage;
 };
 

@@ -1,19 +1,8 @@
 import QtQuick
+import entity
+
 
 QtObject {
-
-    enum Type {
-        WiFi,
-        Url,
-        Email,
-        VCard,
-        Geo,
-        VEvent,
-        Crypto,
-        Sms,
-        SocialMedia,
-        SimpleText
-    }
 
     function getModel() {
         return model;
@@ -21,25 +10,25 @@ QtObject {
 
     function getUrl(popupType) {
         switch(popupType) {
-            case TemplatesModel.WiFi:
+            case QrCodeType.WiFi:
                 return Qt.resolvedUrl("../Popups/WifiPopup.qml");
-            case TemplatesModel.Url:
+            case QrCodeType.Url:
                 return Qt.resolvedUrl("../Popups/UrlPopup.qml");
-            case TemplatesModel.VEvent:
+            case QrCodeType.VEvent:
                 return Qt.resolvedUrl("../Popups/VEventPopup.qml");
-            case TemplatesModel.VCard:
+            case QrCodeType.VCard:
                 return Qt.resolvedUrl("../Popups/VCardPopup.qml");
-            case TemplatesModel.Crypto:
+            case QrCodeType.Crypto:
                 return Qt.resolvedUrl("../Popups/CryptoPopup.qml");
-            case TemplatesModel.Email:
+            case QrCodeType.Email:
                 return Qt.resolvedUrl("../Popups/EmailPopup.qml");
-            case TemplatesModel.Geo:
+            case QrCodeType.Geo:
                 return Qt.resolvedUrl("../Popups/GeoPopup.qml");
-            case TemplatesModel.Sms:
+            case QrCodeType.Sms:
                 return Qt.resolvedUrl("../Popups/SmsPopup.qml");
-            case TemplatesModel.SocialMedia:
+            case QrCodeType.SocialMedia:
                 return Qt.resolvedUrl("../Popups/SocialMediaPopup.qml");
-            case TemplatesModel.SimpleText:
+            case QrCodeType.SimpleText:
                 return Qt.resolvedUrl("../Popups/SimpleTextPopup.qml");
             default:
                 console.error("Unexpected popup type " + popupType);
@@ -47,17 +36,15 @@ QtObject {
     }
 
     property var model: [
-        { text: qsTr("WiFi"), value: TemplatesModel.WiFi },
-        { text: qsTr("Website Link"), value: TemplatesModel.Url },
-        { text: qsTr("Social Media Link"), value: TemplatesModel.SocialMedia },
-        { text: qsTr("Contact (vCard)"), value: TemplatesModel.VCard },
-        { text: qsTr("Calendar (vEvent)"), value: TemplatesModel.VEvent },
-        { text: qsTr("Crypto Payment"), value: TemplatesModel.Crypto },
-        { text: qsTr("Geolocation"), value: TemplatesModel.Geo },
-        { text: qsTr("Email"), value: TemplatesModel.Email },
-        { text: qsTr("SMS Message"), value: TemplatesModel.Sms },
-        { text: qsTr("Simple Text"), value: TemplatesModel.SimpleText }
+        { text: qsTr("WiFi"), value: QrCodeType.WiFi },
+        { text: qsTr("Website Link"), value: QrCodeType.Url },
+        { text: qsTr("Social Media Link"), value: QrCodeType.SocialMedia },
+        { text: qsTr("Contact (vCard)"), value: QrCodeType.VCard },
+        { text: qsTr("Calendar (vEvent)"), value: QrCodeType.VEvent },
+        { text: qsTr("Crypto Payment"), value: QrCodeType.Crypto },
+        { text: qsTr("Geolocation"), value: QrCodeType.Geo },
+        { text: qsTr("Email"), value: QrCodeType.Email },
+        { text: qsTr("SMS Message"), value: QrCodeType.Sms },
+        { text: qsTr("Simple Text"), value: QrCodeType.SimpleText }
    ]
 }
-
-

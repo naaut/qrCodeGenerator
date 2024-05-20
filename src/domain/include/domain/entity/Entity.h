@@ -1,9 +1,10 @@
 #pragma once
 
-#include <QObject>
-#include <QMetaType>
-#include <qrcodegen/qrcodegen.hpp>
+#include <QtCore/QObject>
+#include <QtCore/QMetaType>
 
+namespace domain
+{
 
 class ErrorCorrection  {
 
@@ -19,12 +20,28 @@ public:
         High,       // tolerate about 30%
     };
     Q_ENUM(Level)
+};
 
-    static qrcodegen::QrCode::Ecc toCoreType(const ErrorCorrection::Level & level)
-    {
-        // TODO: can do it better?
-        return static_cast<qrcodegen::QrCode::Ecc>(level);
-    }
+
+class QrCode {
+
+    Q_GADGET
+
+public:
+
+    enum Type {
+        WiFi = 0,
+        Url,
+        Email,
+        VCard,
+        Geo,
+        VEvent,
+        Crypto,
+        Sms,
+        SocialMedia,
+        SimpleText
+    };
+    Q_ENUM(Type)
 };
 
 
@@ -34,3 +51,5 @@ struct QrCodeSettings {
     ErrorCorrection::Level errorCorrection{ErrorCorrection::Level::Medium};
     bool async{true};
 };
+
+} // namespace domain

@@ -1,8 +1,8 @@
 #include "PrintingUsecase.h"
 
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QPainter>
+#include <QtGui/QPainter>
+#include <QtPrintSupport/QPrintDialog>
+#include <QtPrintSupport/QPrinter>
 
 
 PrintingUsecase::PrintingUsecase()

@@ -15,15 +15,21 @@ qt_standard_project_setup()
 
 qt_add_executable(QrCodeGenerator
     main.cpp
-    core/Entity.h
     core/Painter.h
     core/Painter.cpp
+    core/Utils.h
+    presentation/HistoryModel.cpp
+    presentation/HistoryModel.h
+    presentation/HistoryPresenter.cpp
+    presentation/HistoryPresenter.h
     presentation/QrCodePresenter.cpp
     presentation/QrCodePresenter.h
     presentation/SettingsPresenter.cpp
     presentation/SettingsPresenter.h
     usecase/GenerationUsecase.cpp
     usecase/GenerationUsecase.h
+    usecase/HistoryUsecase.cpp
+    usecase/HistoryUsecase.h
     usecase/PrintingUsecase.cpp
     usecase/PrintingUsecase.h
     usecase/SettingsUsecase.cpp
@@ -31,7 +37,7 @@ qt_add_executable(QrCodeGenerator
 )
 
 qt_add_qml_module(QrCodeGenerator
-    URI QmlInjectorCore
+    URI QrCodeGenerator
     VERSION 1.0
     RESOURCE_PREFIX /
     RESOURCES
@@ -43,6 +49,7 @@ qt_target_qml_sources(QrCodeGenerator
     qml/Popups/CryptoPopup.qml
     qml/Popups/EmailPopup.qml
     qml/Popups/GeoPopup.qml
+    qml/Popups/HistoryPopup.qml
     qml/Popups/PopupLoader.qml
     qml/Popups/PopupTemplate.qml
     qml/Popups/SimpleTextPopup.qml
@@ -66,6 +73,8 @@ target_link_libraries(QrCodeGenerator
         Qt6::Quick
         Qt6::Svg
         Qt6::PrintSupport
+        domain
+        data
         qmlinjector
         qrcodegen
 )
@@ -74,7 +83,7 @@ target_link_libraries(QrCodeGenerator
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 set_target_properties(QrCodeGenerator PROPERTIES
-#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appQmlInjectorCore
+#    MACOSX_BUNDLE_GUI_IDENTIFIER net.sednev.qrCodeGenerator
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE

@@ -1,6 +1,7 @@
 #pragma once
 
-#include <QImage>
+#include <QtGui/QImage>
+
 #include <memory>
 
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QObject>
-#include <QQuickPaintedItem>
-#include <QImage>
-#include <QPainter>
+#include <QtCore/QObject>
+#include <QtGui/QImage>
+#include <QtGui/QPainter>
+#include <QtQuick/QQuickPaintedItem>
 
 
 class Painter : public QQuickPaintedItem

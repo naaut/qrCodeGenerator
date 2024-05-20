@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QFuture>
-#include <QObject>
-#include <QString>
+#include <QtCore/QFuture>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 
 #include <memory>
 

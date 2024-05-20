@@ -1,8 +1,8 @@
 #include <qmlinjector/qmlinjector.h>
 #include <qmlinjector/qmlobjectcreator.h>
 
-#include <QQmlContext>
-#include <QQmlEngine>
+#include <QtQml/QQmlContext>
+#include <QtQml/QQmlEngine>
 
 QmlInjector::QmlInjector(QQuickItem * parent)
 	: QQuickItem(parent)

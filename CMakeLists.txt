@@ -10,4 +10,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_subdirectory(src/qmlinjector)
 add_subdirectory(src/qrcodegen)
 add_subdirectory(src/qmlapp)
-
+add_subdirectory(src/domain)
+add_subdirectory(src/data)

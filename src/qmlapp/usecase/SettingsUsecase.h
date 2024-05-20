@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QObject>
-#include <QQmlEngine>
+#include <QtCore/QObject>
+#include <QtQml/QQmlEngine>
 
-#include <core/Entity.h>
+#include <domain/entity/Entity.h>
 
 
 class SettingsUsecase : public QObject
@@ -13,8 +13,8 @@ class SettingsUsecase : public QObject
 public:
     explicit SettingsUsecase();
 
-    void saveSettings(const QrCodeSettings &settings);
-    QrCodeSettings loadSettings();
+    void saveSettings(const domain::QrCodeSettings &settings);
+    domain::QrCodeSettings loadSettings();
 };
 
 using SettingsUsecaseUnq = std::unique_ptr<SettingsUsecase>;

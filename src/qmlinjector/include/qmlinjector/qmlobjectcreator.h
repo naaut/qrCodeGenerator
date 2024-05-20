@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QHash>
-#include <QObject>
-#include <QVariant>
+#include <QtCore/QHash>
+#include <QtCore/QObject>
+#include <QtCore/QVariant>
 
 #include <functional>
 
