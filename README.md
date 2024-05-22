@@ -23,7 +23,7 @@ A flexible QR Code generator written in C++ and QML. This project aims to provid
 
 - C++17 or higher
 - CMake 3.10 or higher
-- Qt 5.15 or higher
+- Qt 6.6.0 or higher
 
 ### Steps
 
