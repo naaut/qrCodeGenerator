@@ -1,6 +1,6 @@
 set(QT_NO_STANDARD_PROJECT_SETUP ON)
 
-find_package(Qt6 6.5 REQUIRED
+find_package(Qt6 6.9 REQUIRED
     COMPONENTS
         Core
         Gui
@@ -37,7 +37,7 @@ qt_add_executable(QrCodeGenerator
 )
 
 qt_add_qml_module(QrCodeGenerator
-    URI QrCodeGenerator
+    URI net.sednev.qrcodegenerator
     VERSION 1.0
     RESOURCE_PREFIX /
     RESOURCES
@@ -62,7 +62,7 @@ qt_target_qml_sources(QrCodeGenerator
     qml/BaseInjectorPage.qml
     qml/MainScreen.qml
     qml/SettingsScreen.qml
-    qml/main.qml
+    qml/Main.qml
 )
 
 target_link_libraries(QrCodeGenerator

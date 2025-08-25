@@ -21,32 +21,8 @@ target_link_libraries(data
 target_sources(data
     PRIVATE
         include/data/HistoryDataProvider.h
-        # include/data/AppProperryRepoImpl.h
-        # include/data/LifeCycleParser.h
-        # include/data/MsgFilter.h
-        # include/data/MsgFilterRepo.h
-        # include/data/MsgParser.h
-        # include/data/MsgRepoImpl.h
-        # include/data/MsgSearchQueryRepo.h
-        # include/data/MessageBuilder.h
-        # include/data/messageSources/FileLogSourceImpl.h
-        # include/data/messageSources/MsgSourceRepoImpl.h
-        # include/data/messageSources/StdinLogSource.h
 
         src/HistoryDataProvider.cpp
-        # src/AppProperryRepoImpl.cpp
-        # src/LifeCycleParser.cpp
-        # src/MsgFilter.cpp
-        # src/MsgFilterRepo.cpp
-        # src/MsgParser.cpp
-        # src/MsgRepoImpl.cpp
-        # src/MsgSearchQueryRepo.cpp
-        # src/MessageBuilder.cpp
-        # src/messageSources/FileLogSourceImpl.cpp
-        # src/messageSources/MsgSourceRepoImpl.cpp
-        # src/messageSources/StdinLogSource.cpp
-        # src/messageSources/qconsolelistener.cpp
-        # src/messageSources/qconsolelistener.h
 )
 
 # enable_testing()

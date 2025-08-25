@@ -23,58 +23,58 @@
 
 namespace di = boost::di;
 
-const char * const qmlPath = "qrc:/QrCodeGenerator/qml/main.qml";
+const char * const qmlPath = "qrc:/QrCodeGeneratorBuild/qml/main.qml";
 
 int main(int argc, char *argv[])
 {
-    const auto injector = di::make_injector(
-            di::bind<QrCodeUsecase>.to<QrCodeUsecase>(),
-            di::bind<SettingsUsecase>.to<SettingsUsecase>(),
-            di::bind<HistoryUsecase>.to<HistoryUsecase>(),
-            di::bind<domain::IHistoryDataProvider>.to<data::HistoryDataProvider>()
-        );
+	const auto injector = di::make_injector(
+		di::bind<QrCodeUsecase>.to<QrCodeUsecase>(),
+		di::bind<SettingsUsecase>.to<SettingsUsecase>(),
+		di::bind<HistoryUsecase>.to<HistoryUsecase>(),
+		di::bind<domain::IHistoryDataProvider>.to<data::HistoryDataProvider>()
+	);
 
-    QmlInjectorBuilder builder;
+	QmlInjectorBuilder builder;
 
-    builder.add<QrCodePresenter>(
-        [&injector](const QVariant &)
-        {
-            return injector.create<QrCodePresenterUnq>();
-        });
-    builder.add<SettingsPresenter>(
-        [&injector](const QVariant &)
-        {
-            return injector.create<SettingsPresenterUnq>();
-        });
-    builder.add<HistoryPresenter>(
-        [&injector](const QVariant &)
-        {
-            return injector.create<HistoryPresenterUnq>();
-        });
+	builder.add<QrCodePresenter>(
+				[&injector](const QVariant &) {
+		return injector.create<QrCodePresenterUnq>();
+	});
 
-    QGuiApplication app(argc, argv);
+	builder.add<SettingsPresenter>(
+				[&injector](const QVariant &) {
+		return injector.create<SettingsPresenterUnq>();
+	});
 
-    QQmlApplicationEngine engine;
-    qmlRegisterType<QmlInjector>("injector", 1, 0, "QmlInjector");
-    qmlRegisterType<HistoryModel>("presenters", 1, 0, "HistoryModel");
-    qmlRegisterType<Painter>("core", 1, 0, "Painter");
+	builder.add<HistoryPresenter>(
+				[&injector](const QVariant &) {
+		return injector.create<HistoryPresenterUnq>();
+	});
 
-    engine.rootContext()->setContextObject(builder.build());
-    engine.rootContext()->setContextProperty("$QmlEngine", &engine);
-    qmlRegisterUncreatableType<domain::ErrorCorrection>("entity", 1, 0, "ECL", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<domain::QrCode>("entity", 1, 0, "QrCodeType", "Not creatable as it is an enum type");
+	QGuiApplication app(argc, argv);
 
-    app.setOrganizationName("sednev.net");
-    app.setOrganizationDomain("sednev.net");
-    app.setApplicationName("QrCode Generator");
+	QQmlApplicationEngine engine;
+	qmlRegisterType<QmlInjector>("injector", 1, 0, "QmlInjector");
+	qmlRegisterType<HistoryModel>("presenters", 1, 0, "HistoryModel");
+	qmlRegisterType<Painter>("core", 1, 0, "Painter");
 
-    QObject::connect(
-        &engine,
-        &QQmlApplicationEngine::objectCreationFailed,
-        &app,
-        []() { QCoreApplication::exit(-1); },
-        Qt::QueuedConnection);
-    engine.load(QUrl(qmlPath));
+	engine.rootContext()->setContextObject(builder.build());
+	engine.rootContext()->setContextProperty("$QmlEngine", &engine);
+	qmlRegisterUncreatableType<domain::ErrorCorrection>("entity", 1, 0, "ECL", "Not creatable as it is an enum type");
+	qmlRegisterUncreatableType<domain::QrCode>("entity", 1, 0, "QrCodeType", "Not creatable as it is an enum type");
 
-    return app.exec();
+	app.setOrganizationName("sednev.net");
+	app.setOrganizationDomain("sednev.net");
+	app.setApplicationName("QrCode Generator");
+
+	QObject::connect(
+		&engine,
+		&QQmlApplicationEngine::objectCreationFailed,
+		&app,
+		[]() { QCoreApplication::exit(-1); },
+		Qt::QueuedConnection);
+
+	engine.loadFromModule("net.sednev.qrcodegenerator", "Main");
+
+	return app.exec();
 }

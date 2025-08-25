@@ -23,7 +23,7 @@ Popup {
 
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
-    onApply: {
+    onApply: function(incomingString) {
         if (typeof(closeCallback) === "function") {
             closeCallback(incomingString);
         }
